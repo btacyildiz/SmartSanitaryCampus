@@ -20,8 +20,11 @@ const path = require('path')
 var SOCKET_LIST = {};
 var PLAYER_LIST = {};
 var shouldSendEmail = true;
+var shouldSendEmail2 = true;
+
 const PORT = process.env.PORT || 5000
 var latestDistance = "Not Available"
+var latestDistance2 = "Not Available"
 
 
 
@@ -57,7 +60,7 @@ function sendEmail(paperid, distance){
   var mailOptions = {
     from: "Sanitary Campus <sanitarycampus490@gmail.com>", // sender address
     to: "sanitarycampus490@gmail.com", // list of receivers
-    subject: "Attention: Currently toilet paper level is low.", // Subject line
+    subject: "Attention: Currently toilet paper no " +paperid+ " level is low.", // Subject line
     text: "Toilet paper level is low...", // plaintext body
     html: "<b>Toilet paper level is low...</b>" // html body
   }
@@ -74,17 +77,26 @@ function sendEmail(paperid, distance){
 app.get('/measurement', (req, res) => {
   console.log("Res: "+ JSON.stringify(req.query))
   latestDistance = req.query.distance
+  latestDistance2  =  req.query.distance2
+
   if(req.query.distance > 10 && shouldSendEmail){
-    sendEmail(10);
+    sendEmail(1, 10);
     shouldSendEmail = false;
   }else if(req.query.distance <= 10){
     shouldSendEmail = true;
   }
 
+  if(req.query.distance2 > 10 && shouldSendEmail2){
+    sendEmail(2, 10);
+    shouldSendEmail2 = false;
+  }else if(req.query.distance2 <= 10){
+    shouldSendEmail2 = true;
+  }
+
   for(var i in SOCKET_LIST) {
     var socket = SOCKET_LIST[i];
-    socket.emit('distance', {"distance": req.query.distance}); 
-}
+    socket.emit('distance', {"distance": latestDistance, "distance2": latestDistance2}); 
+  }
   res.status(200).send('Internet of toilets!');
 });
 
@@ -98,10 +110,7 @@ var io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
-    socket.emit('distance', {"distance": latestDistance}); 
-
-
-
+    socket.emit('distance', {"distance": latestDistance, "distance2": latestDistance2}); 
     socket.on('disconnect', function(){
         delete SOCKET_LIST[socket.id];
     });

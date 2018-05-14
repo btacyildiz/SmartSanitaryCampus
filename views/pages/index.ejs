@@ -1,5 +1,5 @@
 <body>
-<h1 id="distance">Paper Level: ? </h1>
+<h1 id="distance">Paper Level 1: ?,  Paper Level 2: ?</h1>
 
 <script src = https://cdn.socket.io/socket.io-1.4.5.js>
 </script>
@@ -9,7 +9,7 @@
 
     socket.on('distance', function(data){
       console.log(data)
-      document.getElementById("distance").innerHTML = "Paper Level: " + data.distance;
+      document.getElementById("distance").innerHTML = "Paper Level: " + data.distance + ", Paper Level: " + data.distance2;
     });
 </script>
 </body> 
