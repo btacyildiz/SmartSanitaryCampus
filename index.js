@@ -19,10 +19,14 @@ const app = express();
 
 // [START hello_world]
 // Say hello!
-app.get('/', (req, res) => {
+app.get('/measurement', (req, res) => {
   console.log("Res: "+ JSON.stringify(req.query))
   res.status(200).send('Hello, world!');
 });
+
+app.get('/', (req, res) => {
+  res.status(200).send('Hello, world!');
+})
 
 // [END hello_world]
 
