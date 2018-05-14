@@ -21,6 +21,7 @@ var SOCKET_LIST = {};
 var PLAYER_LIST = {};
 var shouldSendEmail = true;
 const PORT = process.env.PORT || 5000
+var latestDistance = "Not Available"
 
 
 
@@ -72,6 +73,7 @@ function sendEmail(paperid, distance){
 
 app.get('/measurement', (req, res) => {
   console.log("Res: "+ JSON.stringify(req.query))
+  latestDistance = req.query.distance
   if(req.query.distance > 10 && shouldSendEmail){
     sendEmail(10);
     shouldSendEmail = false;
@@ -96,6 +98,9 @@ var io = require("socket.io")(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
+    socket.emit('distance', {"distance": latestDistance}); 
+
+
 
     socket.on('disconnect', function(){
         delete SOCKET_LIST[socket.id];
