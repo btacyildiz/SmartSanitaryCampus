@@ -37,17 +37,6 @@ app.get('/', (req, res) => res.render('pages/index'))
 // Say hello!
 
 var nodemailer = require("nodemailer");
-/*
-var smtpTransport  = nodemailer.createTransport({
-  service: 'Gmail', 
-  auth: {
-    xoauth2: xoauth2.createXOAuth2Generator({
-      user: "sanitarycampus490@gmail.com",
-      pass: "sancam490"
-  })
-  }
-});
-*/
 var smtpTransport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -79,17 +68,17 @@ app.get('/measurement', (req, res) => {
   latestDistance = req.query.distance
   latestDistance2  =  req.query.distance2
 
-  if(req.query.distance > 10 && shouldSendEmail){
+  if(latestDistance > 10 && shouldSendEmail){
     sendEmail(1, 10);
     shouldSendEmail = false;
-  }else if(req.query.distance <= 10){
+  }else if(latestDistance <= 10){
     shouldSendEmail = true;
   }
 
-  if(req.query.distance2 > 10 && shouldSendEmail2){
+  if(latestDistance2 > 10 && shouldSendEmail2){
     sendEmail(2, 10);
     shouldSendEmail2 = false;
-  }else if(req.query.distance2 <= 10){
+  }else if(latestDistance2 <= 10){
     shouldSendEmail2 = true;
   }
 
