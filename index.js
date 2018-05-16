@@ -29,7 +29,6 @@ var latestDistance2 = "Not Available"
 
 
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.static(path.join(__dirname, 'node_modules/chart.js')))
 app.use(express.static(path.join(__dirname, 'views')))
 
 
