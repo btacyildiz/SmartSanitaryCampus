@@ -35,32 +35,20 @@
 			data: {
 				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 				datasets: [{
-					label: 'My First dataset',
+					label: 'Toilet Paper 1',
 					backgroundColor: window.chartColors.red,
 					borderColor: window.chartColors.red,
 					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
+						
 					],
 					fill: false,
 				}, {
-					label: 'My Second dataset',
+					label: 'Toilet Paper 2',
 					fill: false,
 					backgroundColor: window.chartColors.blue,
 					borderColor: window.chartColors.blue,
 					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
+					
 					],
 				}]
 			},
@@ -83,7 +71,7 @@
 						display: true,
 						scaleLabel: {
 							display: true,
-							labelString: 'Month'
+							labelString: 'Time'
 						}
 					}],
 					yAxes: [{
@@ -102,36 +90,9 @@
 			window.myLine = new Chart(ctx, config);
 		};
 
-		document.getElementById('randomizeData').addEventListener('click', function() {
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data = dataset.data.map(function() {
-					return randomScalingFactor();
-				});
-
-			});
-
-			window.myLine.update();
-		});
 
 		var colorNames = Object.keys(window.chartColors);
-		document.getElementById('addDataset').addEventListener('click', function() {
-			var colorName = colorNames[config.data.datasets.length % colorNames.length];
-			var newColor = window.chartColors[colorName];
-			var newDataset = {
-				label: 'Dataset ' + config.data.datasets.length,
-				backgroundColor: newColor,
-				borderColor: newColor,
-				data: [],
-				fill: false
-			};
 
-			for (var index = 0; index < config.data.labels.length; ++index) {
-				newDataset.data.push(randomScalingFactor());
-			}
-
-			config.data.datasets.push(newDataset);
-			window.myLine.update();
-		});
 
 		document.getElementById('addData').addEventListener('click', function() {
 			if (config.data.datasets.length > 0) {
@@ -159,6 +120,13 @@
 			});
 
 			window.myLine.update();
+		});
+
+		var socket = io();
+
+		socket.on('distance', function(data){
+		console.log(data)
+		document.getElementById("distance").innerHTML = "Paper Level 1: " + data.distance + ", Paper Level 2: " + data.distance2;
 		});
 	</script>
 </body>

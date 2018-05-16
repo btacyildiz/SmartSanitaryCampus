@@ -29,6 +29,8 @@ var latestDistance2 = "Not Available"
 
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '')))
+
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.render('pages/index'))
@@ -47,7 +49,7 @@ var smtpTransport = nodemailer.createTransport({
   }
 });
 
-function sendEmail(paperid, distance){
+function sendEmail(paperid){
   var mailOptions = {
     from: "Sanitary Campus <sanitarycampus490@gmail.com>", // sender address
     to: "sanitarycampus490@gmail.com", // list of receivers
@@ -63,7 +65,22 @@ function sendEmail(paperid, distance){
     }
   });
 }
-
+function sendEmailFilled(paperid){
+  var mailOptions = {
+    from: "Sanitary Campus <sanitarycampus490@gmail.com>", // sender address
+    to: "sanitarycampus490@gmail.com", // list of receivers
+    subject: "Attention: Currently toilet paper no " +paperid+ " is ### FILLED ###", // Subject line
+    text: "Toilet paper is renewed", // plaintext body
+    html: "<b>Toilet paper is renewed</b>" // html body
+  }
+  smtpTransport.sendMail(mailOptions, function(error, response){
+    if(error){
+        console.log(error);
+    }else{
+        console.log("Message sent: " + response.message);
+    }
+  });
+}
 
 app.get('/measurement', (req, res) => {
   console.log("Res: "+ JSON.stringify(req.query))
@@ -71,16 +88,22 @@ app.get('/measurement', (req, res) => {
   latestDistance2  =  req.query.distance2
 
   if(latestDistance > 10 && shouldSendEmail){
-    sendEmail(1, 10);
+    sendEmail(1);
     shouldSendEmail = false;
-  }else if(latestDistance <= 10){
+  }else if(latestDistance <= 3){
+    if(!shouldSendEmail){
+      sendEmailFilled(1);
+    }
     shouldSendEmail = true;
   }
 
   if(latestDistance2 > 10 && shouldSendEmail2){
-    sendEmail(2, 10);
+    sendEmail(2);
     shouldSendEmail2 = false;
-  }else if(latestDistance2 <= 10){
+  }else if(latestDistance2 <= 3){
+    if(!shouldSendEmail2){
+      sendEmailFilled(2);
+    }
     shouldSendEmail2 = true;
   }
 
