@@ -90,7 +90,7 @@ app.get('/measurement', (req, res) => {
   if(latestDistance > 10 && shouldSendEmail){
     sendEmail(1);
     shouldSendEmail = false;
-  }else if(latestDistance <= 3){
+  }else if(latestDistance <= 5){
     if(!shouldSendEmail){
       sendEmailFilled(1);
     }
@@ -100,7 +100,7 @@ app.get('/measurement', (req, res) => {
   if(latestDistance2 > 10 && shouldSendEmail2){
     sendEmail(2);
     shouldSendEmail2 = false;
-  }else if(latestDistance2 <= 3){
+  }else if(latestDistance2 <= 5){
     if(!shouldSendEmail2){
       sendEmailFilled(2);
     }
