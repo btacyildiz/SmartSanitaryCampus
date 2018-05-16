@@ -129,8 +129,8 @@
 
 		socket.on('distance', function(data){
 		console.log(data);
-		datasets[0].data.push(data.distance);
-		datasets[1].data.push(data.distance2);
+		config.data.datasets[0].data.push(data.distance);
+		config.data.datasets[1].data.push(data.distance2);
 		});
 	</script>
 </body>
