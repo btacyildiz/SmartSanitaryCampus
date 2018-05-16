@@ -129,8 +129,13 @@
 
 		socket.on('distance', function(data){
 		console.log(data);
+		var month = MONTHS[config.data.labels.length % MONTHS.length];
+		config.data.labels.push(month);
 		config.data.datasets[0].data.push(data.distance);
 		config.data.datasets[1].data.push(data.distance2);
+
+		window.myLine.update();
+
 		});
 	</script>
 </body>
