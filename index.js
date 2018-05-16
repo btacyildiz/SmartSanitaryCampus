@@ -32,6 +32,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.render('pages/index'))
+app.get('/chart', (req, res) => res.render('pages/index2'))
+
 
 // [START hello_world]
 // Say hello!
@@ -88,10 +90,6 @@ app.get('/measurement', (req, res) => {
   }
   res.status(200).send('Internet of toilets!');
 });
-
-app.get('/', (req, res) => {
-  res.status(200).send('Hello, world!');
-})
 
 var serv = require("http").Server(app);
 serv.listen(PORT, () => console.log(`Listening on ${ PORT }`))
